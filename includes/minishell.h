@@ -6,7 +6,7 @@
 /*   By: yukoc <yukoc@student.42kocaeli.com.tr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 21:53:55 by ehabes            #+#    #+#             */
-/*   Updated: 2025/05/28 14:23:04 by yukoc            ###   ########.fr       */
+/*   Updated: 2025/05/28 14:41:19 by yukoc            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,16 +25,16 @@
 # include <readline/readline.h>  // readline fonksiyonu
 # include <readline/history.h>   // history yönetimi
 
-# define PROMPT "minishell$ "     // Shell prompt mesajı
-# define MAX_PATH 4096          // Maksimum path uzunluğu
-# define MAX_ARGS 1024          // Maksimum argüman sayısı
+# define PROMPT "minishell$ "    // Shell prompt mesajı
+# define MAX_PATH 4096           // Maksimum path uzunluğu
+# define MAX_ARGS 1024           // Maksimum argüman sayısı
 
 /* Çıkış kodları */
-# define EXIT_SUCCESS 0         // Başarılı çıkış
-# define EXIT_FAILURE 1         // Genel hata
-# define EXIT_MISUSE 2          // Yanlış kullanım
-# define EXIT_CANT_EXEC 126     // Komut çalıştırılamadı
-# define EXIT_NOT_FOUND 127     // Komut bulunamadı
+# define EXIT_SUCCESS 0          // Başarılı çıkış
+# define EXIT_FAILURE 1          // Genel hata
+# define EXIT_MISUSE 2           // Yanlış kullanım
+# define EXIT_CANT_EXEC 126      // Komut çalıştırılamadı
+# define EXIT_NOT_FOUND 127      // Komut bulunamadı
 
 
 /* Lexical analiz için token tipleri */
