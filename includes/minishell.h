@@ -6,7 +6,7 @@
 /*   By: yukoc <yukoc@student.42kocaeli.com.tr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 21:53:55 by ehabes            #+#    #+#             */
-/*   Updated: 2025/05/28 14:46:31 by yukoc            ###   ########.fr       */
+/*   Updated: 2025/05/28 15:48:07 by yukoc            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,7 @@ typedef struct s_minishell
 }	t_minishell;
 
 
-extern t_minishell	g_shell;    // Global shell yapısı
+extern volatile sig_atomic_t	g_shell;    // Global shell yapısı
 
 /*                         YARDIMCI PROTOTİPLER                            */
 
