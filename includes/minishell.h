@@ -6,7 +6,7 @@
 /*   By: yukoc <yukoc@student.42kocaeli.com.tr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 21:53:55 by ehabes            #+#    #+#             */
-/*   Updated: 2025/05/28 15:48:07 by yukoc            ###   ########.fr       */
+/*   Updated: 2025/05/28 16:06:40 by yukoc            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@
 # include <signal.h>             // signal handling
 # include <readline/readline.h>  // readline fonksiyonu
 # include <readline/history.h>   // history yönetimi
+
+# include "../lib/libft/libft.h" // libft
 
 # define PROMPT "minishell$ "    // Shell prompt mesajı
 # define MAX_PATH 4096           // Maksimum path uzunluğu
