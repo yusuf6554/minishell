@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ehabes <ehabes@student.42kocaeli.com.tr    +#+  +:+       +#+        */
+/*   By: yukoc <yukoc@student.42kocaeli.com.tr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 21:53:55 by ehabes            #+#    #+#             */
-/*   Updated: 2025/05/26 23:26:00 by ehabes           ###   ########.fr       */
+/*   Updated: 2025/05/28 14:23:04 by yukoc            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,69 +111,6 @@ typedef struct s_minishell
 
 
 extern t_minishell	g_shell;    // Global shell yapısı
-
-
-/*                     PARSING MODÜLÜ PROTOTİPLERİ                         */
-
-
-/* Tokenizer fonksiyonları */
-t_token		*tokenize(char *input);              // Input'u token'lara ayır
-t_token		*create_token(char *value, t_token_type type);  // Yeni token oluştur
-void		free_tokens(t_token *tokens);        // Token'ları temizle
-
-/* Parser fonksiyonları */
-t_pipeline	*parse_pipeline(t_token *tokens);    // Token'ları pipeline'a çevir
-t_cmd		*parse_command(t_token **tokens);    // Tek komutu parse et
-void		free_pipeline(t_pipeline *pipeline); // Pipeline'ı temizle
-void		free_command(t_cmd *cmd);            // Komutu temizle
-
-/* Genişletici fonksiyonları */
-char		*expand_variables(char *str, char **env);  // $VAR expansion
-char		*get_env_value(char *name, char **env);    // Env değişken değeri al
-int			is_valid_var_char(char c);               // Geçerli değişken karakteri mi
-
-/* Sinyal yönetimi */
-void		setup_signals(void);                 // Signal handler'ları kur
-void		setup_child_signals(void);          // Child process signalleri
-void		handle_sigint(int sig);              // Ctrl-C handler
-void		handle_sigquit(int sig);             // Ctrl-\ handler
-
-
-/*                   EXECUTION MODÜLÜ PROTOTİPLERİ                         */
-
-
-/* Ana yürütücü */
-int			execute_pipeline(t_pipeline *pipeline, char ***env);  // Pipeline'ı çalıştır
-int			execute_command(t_cmd *cmd, char ***env);            // Tek komutu çalıştır
-int			execute_single_command(t_cmd *cmd, char ***env);     // Basit komut çalıştır
-
-/* Process yönetimi */
-pid_t		create_process(void);                     // Yeni process oluştur
-int			wait_for_processes(pid_t *pids, int count);  // Process'leri bekle
-char		*find_executable(char *cmd, char **env);     // PATH'te executable bul
-
-/* Pipe yönetimi */
-int			setup_pipes(t_cmd *commands);             // Pipe'ları kur
-void		close_pipes(int **pipes, int count);      // Pipe'ları kapat
-int			**create_pipes(int count);                // Pipe array'i oluştur
-
-/* Yönlendirme yönetimi */
-int			setup_redirections(t_redirect *redirects);    // Redirection'ları kur
-int			handle_input_redirect(char *file);           // Input redirection
-int			handle_output_redirect(char *file, int append);  // Output redirection
-int			handle_heredoc(char *delimiter);              // Heredoc işle
-
-/* Dahili komutlar */
-int			is_builtin(char *cmd);                    // Built-in komut mu kontrol et
-int			execute_builtin(char **argv, char ***env);  // Built-in komutu çalıştır
-int			builtin_echo(char **argv);                // echo komutu
-int			builtin_cd(char **argv, char ***env);     // cd komutu
-int			builtin_pwd(void);                        // pwd komutu
-int			builtin_export(char **argv, char ***env); // export komutu
-int			builtin_unset(char **argv, char ***env);  // unset komutu
-int			builtin_env(char **env);                  // env komutu
-int			builtin_exit(char **argv);                // exit komutu
-
 
 /*                         YARDIMCI PROTOTİPLER                            */
 
