@@ -6,7 +6,7 @@
 /*   By: ehabes <ehabes@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 21:53:55 by ehabes            #+#    #+#             */
-/*   Updated: 2025/05/30 01:26:49 by ehabes           ###   ########.fr       */
+/*   Updated: 2025/05/30 01:43:22 by ehabes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,38 +113,61 @@ typedef struct s_minishell
 extern volatile sig_atomic_t	g_shell;
 
 /* Hafıza yardımcıları */
+/* Güvenli free */
 void		ft_free(void **ptr);
+/* String array'ini temizle */
 void		free_string_array(char **arr);
+/* Array eleman sayısı */
 int			count_string_array(char **arr);
+/* Array'i kopyala */
 char		**copy_string_array(char **arr);
 
 /* Environment yardımcıları */
+/* Env değişken değeri al */
 char		*ft_getenv(char *name, char **env);
+/* Env değişken ekle */
 char		**env_add_var(char **env, char *name, char *value);
+/* Env değişken sil */
 char		**env_remove_var(char **env, char *name);
+/* Env'i kopyala */
 char		**env_copy(char **env);
+/* Env'i temizle */
 void		env_free(char **env);
+/* Env değişken indexi */
 int			env_find_index(char **env, char *name);
 
 /* Hata yönetimi */
+/* Hata mesajı yazdır */
 void		error_msg(char *cmd, char *arg, char *msg);
+/* System error yazdır */
 void		perror_msg(char *cmd);
+/* Syntax hatası */
 int			syntax_error(char *token);
+/* Komut bulunamadı hatası */
 void		command_not_found(char *cmd);
 
-/* Debug yardımcıları */
+/* Debug yardımcıları (geliştirme için) */
+/* Token'ları yazdır */
 void		print_tokens(t_token *tokens);
+/* Pipeline yazdır */
 void		print_pipeline(t_pipeline *pipeline);
+/* Env'i yazdır */
 void		print_env(char **env);
 
 /* Ana shell döngüsü */
+/* Ana fonksiyon */
 int			main(int argc, char **argv, char **envp);
+/* Shell döngüsü */
 void		shell_loop(void);
+/* Input oku */
 char		*read_input(void);
+/* Boş input kontrolü */
 int			is_empty_input(char *input);
 
 /* Başlatma ve temizleme */
+/* Shell başlatma */
 void		init_shell(char **envp);
+/* Shell temizleme */
 void		cleanup_shell(void);
 
 #endif
