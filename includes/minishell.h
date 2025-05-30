@@ -113,6 +113,7 @@ typedef struct s_minishell
 extern volatile sig_atomic_t	g_shell;
 
 /* Hafıza yardımcıları */
+
 /* Güvenli free */
 void		ft_free(void **ptr);
 /* String array'ini temizle */
@@ -123,6 +124,7 @@ int			count_string_array(char **arr);
 char		**copy_string_array(char **arr);
 
 /* Environment yardımcıları */
+
 /* Env değişken değeri al */
 char		*ft_getenv(char *name, char **env);
 /* Env değişken ekle */
@@ -135,8 +137,11 @@ char		**env_copy(char **env);
 void		env_free(char **env);
 /* Env değişken indexi */
 int			env_find_index(char **env, char *name);
+/* // Env değişken adı validasyonu */
+int			env_validate_name(char *name);
 
 /* Hata yönetimi */
+
 /* Hata mesajı yazdır */
 void		error_msg(char *cmd, char *arg, char *msg);
 /* System error yazdır */
@@ -147,6 +152,7 @@ int			syntax_error(char *token);
 void		command_not_found(char *cmd);
 
 /* Debug yardımcıları (geliştirme için) */
+
 /* Token'ları yazdır */
 void		print_tokens(t_token *tokens);
 /* Pipeline yazdır */
@@ -155,6 +161,7 @@ void		print_pipeline(t_pipeline *pipeline);
 void		print_env(char **env);
 
 /* Ana shell döngüsü */
+
 /* Ana fonksiyon */
 int			main(int argc, char **argv, char **envp);
 /* Shell döngüsü */
@@ -165,6 +172,7 @@ char		*read_input(void);
 int			is_empty_input(char *input);
 
 /* Başlatma ve temizleme */
+
 /* Shell başlatma */
 void		init_shell(char **envp);
 /* Shell temizleme */
