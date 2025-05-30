@@ -6,7 +6,7 @@
 /*   By: yukoc <yukoc@student.42kocaeli.com.tr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 15:51:19 by yukoc             #+#    #+#             */
-/*   Updated: 2025/05/28 16:12:08 by yukoc            ###   ########.fr       */
+/*   Updated: 2025/05/30 21:56:33 by yukoc            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ char	**copy_string_array(char **arr)
 	arr_len = count_string_array(arr);
 	if (arr_len < 1)
 		return (NULL);
-	new_arr = (char *)malloc(sizeof(char *) * (arr_len + 1));
+	new_arr = (char **)malloc(sizeof(char *) * (arr_len + 1));
 	if (!new_arr)
 		return (NULL);
 	i = -1;
