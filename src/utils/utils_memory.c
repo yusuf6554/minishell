@@ -6,25 +6,11 @@
 /*   By: yukoc <yukoc@student.42kocaeli.com.tr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 15:51:19 by yukoc             #+#    #+#             */
-/*   Updated: 2025/05/30 21:56:33 by yukoc            ###   ########.fr       */
+/*   Updated: 2025/06/04 22:24:38 by yukoc            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-
-void	ft_free(void **ptr)
-{
-	if (*ptr)
-	{
-		free(*ptr);
-		*ptr = NULL;
-	}
-	if (ptr)
-	{
-		free(ptr);
-		ptr = NULL;
-	}
-}
 
 void	free_string_array(char **arr)
 {

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ehabes <ehabes@student.42kocaeli.com.tr    +#+  +:+       +#+        */
+/*   By: yukoc <yukoc@student.42kocaeli.com.tr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 14:18:24 by yukoc             #+#    #+#             */
-/*   Updated: 2025/05/30 01:40:49 by ehabes           ###   ########.fr       */
+/*   Updated: 2025/06/04 22:51:08 by yukoc            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ t_token		*tokenize(char *input);
 /* Yeni token oluştur */
 t_token		*create_token(char *value, t_token_type type);
 /* Token'ları temizle */
-void		free_tokens(t_token *tokens);
+void		free_tokens(t_token **tokens);
 
 /* Parser fonksiyonları */
 /* Token'ları pipeline'a çevir */
@@ -29,7 +29,7 @@ t_pipeline	*parse_pipeline(t_token *tokens);
 /* Tek komutu parse et */
 t_cmd		*parse_command(t_token **tokens);
 /* Pipeline'ı temizle */
-void		free_pipeline(t_pipeline *pipeline);
+void		free_pipeline(t_pipeline **pipeline);
 /* Komutu temizle */
 void		free_command(t_cmd *cmd);
 

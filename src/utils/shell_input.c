@@ -1,27 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   shell_input.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yukoc <yukoc@student.42kocaeli.com.tr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/28 14:22:06 by yukoc             #+#    #+#             */
-/*   Updated: 2025/06/04 23:05:03 by yukoc            ###   ########.fr       */
+/*   Created: 2025/06/04 21:46:36 by yukoc             #+#    #+#             */
+/*   Updated: 2025/06/04 23:09:56 by yukoc            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "../../includes/minishell.h"
 
-volatile sig_atomic_t	g_signal = 0;
-
-int	main(int argc, char **argv, char **envp)
+int	is_empty_input(char *input)
 {
-	t_minishell	ms;
+	char	*trimmed;
 
-	(void)argc;
-	(void)argv;
-	init_shell(envp, &ms);
-	shell_loop(&ms);
-	cleanup_shell(&ms);
-	return (EXIT_SUCCESS);
+	if (!input)
+		return (1);
+	trimmed = ft_strtrim(input, "\t \n");
+	if (!trimmed || !*trimmed)
+		return (1);
+	free_string(trimmed);
+	return (0);
+}
+
+char	*read_input(void)
+{
+	char	*input;
+
+	input = readline(PROMPT);
+	if (is_empty_input(input))
+		return (free_string(input), NULL);
+	return (input);
 }

@@ -6,7 +6,7 @@
 /*   By: yukoc <yukoc@student.42kocaeli.com.tr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 21:53:55 by ehabes            #+#    #+#             */
-/*   Updated: 2025/05/30 21:33:06 by yukoc            ###   ########.fr       */
+/*   Updated: 2025/06/04 23:15:21 by yukoc            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,18 +110,22 @@ typedef struct s_minishell
 	int					pid_count;
 }	t_minishell;
 
-extern volatile sig_atomic_t	g_shell;
+extern volatile sig_atomic_t	g_signal;
 
 /* Hafıza yardımcıları */
 
 /* Güvenli free */
 void		ft_free(void **ptr);
+/* Güvenli string free */
+void		free_string(char *str);
 /* String array'ini temizle */
 void		free_string_array(char **arr);
 /* Array eleman sayısı */
 int			count_string_array(char **arr);
 /* Array'i kopyala */
 char		**copy_string_array(char **arr);
+/* Pids'i temizle */
+void		free_pids(pid_t *pids);
 
 /* Environment yardımcıları */
 
@@ -165,7 +169,7 @@ void		print_env(char **env);
 /* Ana fonksiyon */
 int			main(int argc, char **argv, char **envp);
 /* Shell döngüsü */
-void		shell_loop(void);
+void		shell_loop(t_minishell *ms);
 /* Input oku */
 char		*read_input(void);
 /* Boş input kontrolü */
@@ -174,8 +178,8 @@ int			is_empty_input(char *input);
 /* Başlatma ve temizleme */
 
 /* Shell başlatma */
-void		init_shell(char **envp);
+void		init_shell(char **envp, t_minishell *ms);
 /* Shell temizleme */
-void		cleanup_shell(void);
+void		cleanup_shell(t_minishell *ms);
 
 #endif
