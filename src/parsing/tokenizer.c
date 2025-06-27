@@ -6,7 +6,7 @@
 /*   By: yukoc <yukoc@student.42kocaeli.com.tr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/26 13:43:37 by yukoc             #+#    #+#             */
-/*   Updated: 2025/06/26 14:08:37 by yukoc            ###   ########.fr       */
+/*   Updated: 2025/06/27 21:53:10 by yukoc            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 t_token	*tokenize(char *input)
 {
 	t_token			*tokens;
+	t_token			*new_token;
 	char			*current;
 	char			**split;
 	t_token_type	type;
@@ -25,9 +26,17 @@ t_token	*tokenize(char *input)
 	while (*split)
 	{
 		type = tokenize_type(*split);
-		tokens = create_token(*split, type);
+		new_token = create_token(*split, type);
+		if (!new_token)
+		{
+			free_string_array(split);
+			free_tokens(&tokens);
+			return (NULL);
+		}
+		add_token(tokens, new_token);
 		split++;
 	}
+	free_string_array(split);
 	return (tokens);
 }
 
@@ -61,6 +70,19 @@ t_token	*create_token(char *value, t_token_type type)
 	new_token->type = type;
 	new_token->next = NULL;
 	return (new_token);
+}
+
+static t_token	*add_token(t_token *tokens, t_token *new_token)
+{
+	t_token	*current;
+
+	if (!tokens)
+		return (new_token);
+	current = tokens;
+	while (current->next)
+		current = current->next;
+	current->next = new_token;
+	return (tokens);
 }
 
 void	free_tokens(t_token **tokens)

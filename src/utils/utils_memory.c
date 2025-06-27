@@ -6,7 +6,7 @@
 /*   By: yukoc <yukoc@student.42kocaeli.com.tr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 15:51:19 by yukoc             #+#    #+#             */
-/*   Updated: 2025/06/04 22:24:38 by yukoc            ###   ########.fr       */
+/*   Updated: 2025/06/27 21:57:05 by yukoc            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,4 +61,42 @@ char	**copy_string_array(char **arr)
 	}
 	new_arr[i] = NULL;
 	return (new_arr);
+}
+
+char	**ft_add_str_to_array(char **array, char *str)
+{
+	int		count;
+	char	**new_array;
+
+	if (!array)
+	{
+		new_array = malloc(2 * sizeof(char *));
+		if (!new_array)
+			return (NULL);
+		new_array[0] = ft_strdup(str);
+		new_array[1] = NULL;
+		return (new_array);
+	}
+	count = 0;
+	while (array[count])
+		count++;
+	new_array = malloc((count + 2) * sizeof(char *));
+	if (!new_array)
+		return (NULL);
+	ft_copy_array(new_array, array, count);
+	new_array[count] = ft_strdup(str);
+	new_array[count + 1] = NULL;
+	free(array);
+	return (new_array);
+}
+
+static void	ft_copy_array(char **dest, char **src, int count)
+{
+	int	i;
+
+	if (!dest || !src || count <= 0)
+		return ;
+	i = -1;
+	while (++i < count)
+		dest[i] = ft_strdup(src[i]);
 }

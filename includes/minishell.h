@@ -6,7 +6,7 @@
 /*   By: yukoc <yukoc@student.42kocaeli.com.tr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 21:53:55 by ehabes            #+#    #+#             */
-/*   Updated: 2025/06/04 23:15:21 by yukoc            ###   ########.fr       */
+/*   Updated: 2025/06/27 21:49:16 by yukoc            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,6 +124,8 @@ void		free_string_array(char **arr);
 int			count_string_array(char **arr);
 /* Array'i kopyala */
 char		**copy_string_array(char **arr);
+/* String array'e yeni string ekle */
+char		**ft_add_str_to_array(char **array, char *str);
 /* Pids'i temizle */
 void		free_pids(pid_t *pids);
 
