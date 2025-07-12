@@ -1,22 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strchr.c                                        :+:      :+:    :+:   */
+/*   builtin_unset.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yukoc <yukoc@student.42kocaeli.com.tr>     +#+  +:+       +#+        */
+/*   By: ehabes <ehabes@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/12 13:23:55 by yukoc             #+#    #+#             */
-/*   Updated: 2024/10/22 12:35:57 by yukoc            ###   ########.fr       */
+/*   Created: 2025/06/23 21:46:49 by ehabes            #+#    #+#             */
+/*   Updated: 2025/06/24 17:42:36 by ehabes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-char	*ft_strchr(const char *s, int c)
+#include "../../../includes/execution.h"
+
+int	builtin_unset(char **argv, char ***env)
 {
-	while ((char)c != *s)
-	{
-		if (*s == 0)
-			return (0);
-		s++;
-	}
-	return ((char *)s);
+	(void)argv;
+	(void)env;
+	return (EXIT_SUCCESS);
 }

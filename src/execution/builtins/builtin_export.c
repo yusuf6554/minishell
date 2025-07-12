@@ -1,18 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_bzero.c                                         :+:      :+:    :+:   */
+/*   builtin_export.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yukoc <yukoc@student.42kocaeli.com.tr>     +#+  +:+       +#+        */
+/*   By: ehabes <ehabes@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/09 14:46:56 by yukoc             #+#    #+#             */
-/*   Updated: 2024/10/20 12:25:17 by yukoc            ###   ########.fr       */
+/*   Created: 2025/06/23 21:46:29 by ehabes            #+#    #+#             */
+/*   Updated: 2025/06/24 17:42:43 by ehabes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../../../includes/execution.h"
 
-void	ft_bzero(void *s, size_t n)
+int	builtin_export(char **argv, char ***env)
 {
-	ft_memset(s, 0, n);
+	(void)argv;
+	(void)env;
+	return (EXIT_SUCCESS);
 }

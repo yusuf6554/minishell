@@ -1,27 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   builtin_pwd.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yukoc <yukoc@student.42kocaeli.com.tr>     +#+  +:+       +#+        */
+/*   By: ehabes <ehabes@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/28 14:22:06 by yukoc             #+#    #+#             */
-/*   Updated: 2025/06/04 23:05:03 by yukoc            ###   ########.fr       */
+/*   Created: 2025/06/23 21:46:36 by ehabes            #+#    #+#             */
+/*   Updated: 2025/06/24 17:42:38 by ehabes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "../../../includes/execution.h"
 
-volatile sig_atomic_t	g_signal = 0;
-
-int	main(int argc, char **argv, char **envp)
+int	builtin_pwd(void)
 {
-	t_minishell	ms;
+	char	*cwd;
 
-	(void)argc;
-	(void)argv;
-	init_shell(envp, &ms);
-	shell_loop(&ms);
-	cleanup_shell(&ms);
+	cwd = getcwd(NULL, 0);
+	if (!cwd)
+	{
+		perror_msg("pwd");
+		return (EXIT_FAILURE);
+	}
+	ft_putstr_fd(cwd, STDOUT_FILENO);
+	ft_putchar_fd('\n', STDOUT_FILENO);
+	free(cwd);
 	return (EXIT_SUCCESS);
 }

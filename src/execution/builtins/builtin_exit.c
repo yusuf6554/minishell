@@ -1,18 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_tolower.c                                       :+:      :+:    :+:   */
+/*   builtin_exit.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yukoc <yukoc@student.42kocaeli.com.tr>     +#+  +:+       +#+        */
+/*   By: ehabes <ehabes@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/09 14:59:21 by yukoc             #+#    #+#             */
-/*   Updated: 2024/10/09 14:59:44 by yukoc            ###   ########.fr       */
+/*   Created: 2025/06/23 21:46:22 by ehabes            #+#    #+#             */
+/*   Updated: 2025/06/24 17:42:44 by ehabes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int	ft_tolower(int c)
+#include "../../../includes/execution.h"
+
+int	builtin_exit(char **argv)
 {
-	if (c >= 'A' && c <= 'Z')
-		return (c - 'A' + 'a');
-	return (c);
+	int	exit_status;
+
+	exit_status = EXIT_SUCCESS;
+	ft_putstr_fd("exit\n", STDOUT_FILENO);
+	if (argv && argv[1])
+		exit_status = ft_atoi(argv[1]);
+	exit(exit_status);
 }
