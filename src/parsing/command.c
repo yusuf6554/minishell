@@ -6,7 +6,7 @@
 /*   By: yukoc <yukoc@student.42kocaeli.com.tr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 21:39:49 by yukoc             #+#    #+#             */
-/*   Updated: 2025/06/27 21:52:48 by yukoc            ###   ########.fr       */
+/*   Updated: 2025/07/21 12:18:25 by yukoc            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,8 @@ void	free_command(t_cmd *cmd)
 
 	if (!cmd)
 		return ;
-	free(cmd->argv);
+	if (cmd->argv)
+		ft_free_str_array(cmd->argv);
 	current = cmd->redirects;
 	while (current)
 	{
