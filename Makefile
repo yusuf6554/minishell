@@ -8,7 +8,9 @@ LDFLAGS = -lreadline
 SRC_FILES = main.c utils/shell_core.c utils/shell_input.c \
 			utils/utils_env_mgmt.c utils/utils_env.c \
 			utils/utils_error.c utils/utils_free.c \
-			utils/utils_memory.c
+			utils/utils_memory.c \
+			parsing/command.c parsing/pipeline.c \
+			parsing/signal.c parsing/tokenizer.c
 
 SRCS_DIR = src
 SRCS = $(addprefix $(SRCS_DIR)/, $(SRC_FILES))

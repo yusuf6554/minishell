@@ -6,11 +6,14 @@
 /*   By: yukoc <yukoc@student.42kocaeli.com.tr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/26 13:43:37 by yukoc             #+#    #+#             */
-/*   Updated: 2025/06/27 21:53:10 by yukoc            ###   ########.fr       */
+/*   Updated: 2025/07/24 13:37:55 by yukoc            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/parsing.h"
+
+static t_token_type	tokenize_type(char *value);
+static t_token	*add_token(t_token *tokens, t_token *new_token);
 
 t_token	*tokenize(char *input)
 {
@@ -22,7 +25,7 @@ t_token	*tokenize(char *input)
 
 	tokens = NULL;
 	current = input;
-	split = ft_split(current, " ");
+	split = ft_split(current, ' ');
 	while (*split)
 	{
 		type = tokenize_type(*split);

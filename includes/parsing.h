@@ -6,7 +6,7 @@
 /*   By: yukoc <yukoc@student.42kocaeli.com.tr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 14:18:24 by yukoc             #+#    #+#             */
-/*   Updated: 2025/06/04 22:51:08 by yukoc            ###   ########.fr       */
+/*   Updated: 2025/07/24 13:36:54 by yukoc            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@ t_cmd		*parse_command(t_token **tokens);
 void		free_pipeline(t_pipeline **pipeline);
 /* Komutu temizle */
 void		free_command(t_cmd *cmd);
+/* Komutları pipeline'a ekle */
+void		add_command(t_pipeline *pipeline, t_cmd *cmd);
 
 /* Genişletici fonksiyonları */
 /* $VAR expansion */

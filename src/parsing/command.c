@@ -6,11 +6,15 @@
 /*   By: yukoc <yukoc@student.42kocaeli.com.tr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 21:39:49 by yukoc             #+#    #+#             */
-/*   Updated: 2025/07/21 12:18:25 by yukoc            ###   ########.fr       */
+/*   Updated: 2025/07/24 13:35:49 by yukoc            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/parsing.h"
+
+static t_cmd	*create_command(void);
+static t_redirect	*create_redirect(t_token_type type, char *file);
+static void	free_redirects(t_redirect **redirects);
 
 t_cmd	*parse_command(t_token **tokens)
 {
@@ -61,7 +65,7 @@ void	free_command(t_cmd *cmd)
 	if (!cmd)
 		return ;
 	if (cmd->argv)
-		ft_free_str_array(cmd->argv);
+		free_string_array(cmd->argv);
 	current = cmd->redirects;
 	while (current)
 	{
@@ -80,7 +84,7 @@ static t_redirect	*create_redirect(t_token_type type, char *file)
 	redirect = malloc(sizeof(t_redirect));
 	if (!redirect)
 		return (NULL);
-	redirect->type = type;
+	redirect->type = ((t_redirect_type)((int)type - 2));
 	redirect->file = NULL;
 	redirect->fd = -1;
 	redirect->next = NULL;
@@ -89,7 +93,7 @@ static t_redirect	*create_redirect(t_token_type type, char *file)
 		redirect->file = ft_strdup(file);
 		if (!redirect->file)
 		{
-			free(redirect);
+			free_redirects(&redirect);
 			return (NULL);
 		}
 	}
@@ -107,7 +111,7 @@ static void	free_redirects(t_redirect **redirects)
 	while (current)
 	{
 		next = current->next;
-		free(current->file);
+		free_string(current->file);
 		free(current);
 		current = next;
 	}

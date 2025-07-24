@@ -6,7 +6,7 @@
 /*   By: yukoc <yukoc@student.42kocaeli.com.tr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 22:23:31 by yukoc             #+#    #+#             */
-/*   Updated: 2025/06/04 23:10:07 by yukoc            ###   ########.fr       */
+/*   Updated: 2025/07/24 13:38:46 by yukoc            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void	free_pids(pid_t *pids)
 		return ;
 	free(pids);
 }
-
+/*
 void	free_tokens(t_token **token)
 {
 	t_token	*cur;
@@ -59,6 +59,7 @@ void	free_tokens(t_token **token)
 	}
 	*token = NULL;
 }
+*/
 
 /*
 void	free_pipeline(t_pipeline **pipeline)

@@ -6,11 +6,13 @@
 /*   By: yukoc <yukoc@student.42kocaeli.com.tr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 15:51:19 by yukoc             #+#    #+#             */
-/*   Updated: 2025/06/27 21:57:05 by yukoc            ###   ########.fr       */
+/*   Updated: 2025/07/24 13:31:02 by yukoc            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+static void	ft_copy_array(char **dest, char **src, int count);
 
 void	free_string_array(char **arr)
 {
