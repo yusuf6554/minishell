@@ -6,7 +6,7 @@
 /*   By: ehabes <ehabes@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 14:20:17 by yukoc             #+#    #+#             */
-/*   Updated: 2025/05/30 01:42:50 by ehabes           ###   ########.fr       */
+/*   Updated: 2025/07/20 14:44:49 by ehabes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,16 @@ int		execute_pipeline(t_pipeline *pipeline, char ***env);
 int		execute_command(t_cmd *cmd, char ***env);
 /* Basit komut çalıştır */
 int		execute_single_command(t_cmd *cmd, char ***env);
+/* Harici komut çalıştır */
+int		execute_external_command(t_cmd *cmd, char ***env);
+
+/* Pipeline yardımcıları */
+/* Pipeline kaynaklarını hazırla */
+int		setup_pipeline_resources(t_pipeline *pipeline, int ***pipes, pid_t **pids);
+/* Pipeline komutlarını çalıştır */
+int		execute_pipeline_commands(t_pipeline *pipeline, int **pipes, pid_t *pids, char ***env);
+/* Pipeline'ı sonlandır */
+int		finalize_pipeline(int **pipes, pid_t *pids, int cmd_count);
 
 /* Process yönetimi */
 /* Yeni process oluştur */
@@ -38,6 +48,10 @@ int		setup_pipes(t_cmd *commands);
 void	close_pipes(int **pipes, int count);
 /* Pipe array'i oluştur */
 int		**create_pipes(int count);
+/* Pipe redirection kur */
+int		setup_pipe_redirection(int **pipes, int cmd_index, int total_cmds);
+/* Tüm pipe'ları kapat */
+void	close_all_pipes(int **pipes, int count);
 
 /* Yönlendirme yönetimi */
 /* Redirection'ları kur */

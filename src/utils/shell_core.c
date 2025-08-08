@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   shell_core.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yukoc <yukoc@student.42kocaeli.com.tr>     +#+  +:+       +#+        */
+/*   By: ehabes <ehabes@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 21:15:28 by yukoc             #+#    #+#             */
-/*   Updated: 2025/06/04 23:09:59 by yukoc            ###   ########.fr       */
+/*   Updated: 2025/07/20 16:59:30 by ehabes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,14 +54,14 @@ void	shell_loop(t_minishell *ms)
 	{
 		input = read_input();
 		if (!input)
-			continue ;
+			break ;
 		if (is_empty_input(input))
 		{
 			free_string(input);
 			continue ;
 		}
 		add_history(input);
-		tokens = tokenize(input);
+		tokens = tokenize_with_expansion(input, ms->env, ms->exit_status);
 		free_string(input);
 		pipeline = parse_pipeline(tokens);
 		free_tokens(&tokens);

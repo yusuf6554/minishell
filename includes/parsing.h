@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yukoc <yukoc@student.42kocaeli.com.tr>     +#+  +:+       +#+        */
+/*   By: ehabes <ehabes@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 14:18:24 by yukoc             #+#    #+#             */
-/*   Updated: 2025/06/04 22:51:08 by yukoc            ###   ########.fr       */
+/*   Updated: 2025/07/20 17:01:36 by ehabes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,10 @@
 /* Tokenizer fonksiyonları */
 /* Input'u token'lara ayır */
 t_token		*tokenize(char *input);
+/* Environment variable expansion ile tokenize */
+t_token		*tokenize_with_expansion(char *input, char **env, int exit_status);
+/* Environment variable expansion */
+char		*expand_env_vars(char *str, char **env);
 /* Yeni token oluştur */
 t_token		*create_token(char *value, t_token_type type);
 /* Token'ları temizle */
@@ -35,7 +39,7 @@ void		free_command(t_cmd *cmd);
 
 /* Genişletici fonksiyonları */
 /* $VAR expansion */
-char		*expand_variables(char *str, char **env);
+char		*expand_variables(char *str, char **env, int exit_status);
 /* Env değişken değeri al */
 char		*get_env_value(char *name, char **env);
 /* Geçerli değişken karakteri mi */

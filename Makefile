@@ -5,21 +5,34 @@ CFLAGS = -Wall -Wextra -Werror -g
 RM = rm -f
 LDFLAGS = -lreadline
 
-SRC_FILES = main.c utils/shell_core.c utils/shell_input.c \
+MAIN_SRC = main.c
+
+SRC_FILES = utils/shell_core.c utils/shell_input.c \
 			utils/utils_env_mgmt.c utils/utils_env.c \
 			utils/utils_error.c utils/utils_free.c \
-			utils/utils_memory.c
+			utils/utils_memory.c \
+			parsing/tokenizer.c parsing/tokenizer_expand.c \
+			parsing/command.c parsing/pipeline.c parsing/signal.c \
+			execution/executor.c execution/pipes.c \
+			execution/redirections.c execution/builtin_dispatcher.c \
+			execution/external_command.c execution/builtin_checker.c \
+			execution/pipeline_utils.c execution/heredoc.c \
+			execution/builtins/builtin_echo.c execution/builtins/builtin_cd.c \
+			execution/builtins/builtin_pwd.c execution/builtins/builtin_export.c \
+			execution/builtins/builtin_unset.c execution/builtins/builtin_env.c \
+			execution/builtins/builtin_exit.c
 
 SRCS_DIR = src
-SRCS = $(addprefix $(SRCS_DIR)/, $(SRC_FILES))
+SRCS = $(MAIN_SRC) $(addprefix $(SRCS_DIR)/, $(SRC_FILES))
 
+MAIN_OBJ = $(MAIN_SRC:.c=.o)
 OBJ_FILES = $(SRC_FILES:.c=.o)
-OBJS = $(addprefix $(OBJ_DIR)/, $(OBJ_FILES))
+OBJS = $(addprefix $(OBJ_DIR)/, $(MAIN_OBJ) $(OBJ_FILES))
 OBJ_DIR = obj
 
 DIRS := $(sort $(dir $(OBJS)))
 
-INC_DIR = include
+INC_DIR = includes
 INC = -I$(INC_DIR)
 
 LIBFT_DIR = lib/libft
@@ -38,6 +51,10 @@ $(NAME): $(OBJS) $(LIBFT)
 	@echo "$(GREEN)✓ $(NAME) created successfully$(RESET)"
 
 $(OBJ_DIR)/%.o: $(SRCS_DIR)/%.c | $(DIRS)
+	$(CC) $(CFLAGS) $(INC) -c $< -o $@
+	@echo "$(BLUE)  → Compiled: $< $(RESET)"
+
+$(OBJ_DIR)/%.o: %.c | $(DIRS)
 	$(CC) $(CFLAGS) $(INC) -c $< -o $@
 	@echo "$(BLUE)  → Compiled: $< $(RESET)"
 
