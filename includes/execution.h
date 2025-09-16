@@ -6,7 +6,7 @@
 /*   By: ehabes <ehabes@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 14:20:17 by yukoc             #+#    #+#             */
-/*   Updated: 2025/07/20 14:44:49 by ehabes           ###   ########.fr       */
+/*   Updated: 2025/08/13 15:11:55 by ehabes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,13 +55,13 @@ void	close_all_pipes(int **pipes, int count);
 
 /* Yönlendirme yönetimi */
 /* Redirection'ları kur */
-int		setup_redirections(t_redirect *redirects);
+int		setup_redirections(t_redirect *redirects, char **env, int exit_status);
 /* Input redirection */
 int		handle_input_redirect(char *file);
 /* Output redirection */
 int		handle_output_redirect(char *file, int append);
 /* Heredoc işle */
-int		handle_heredoc(char *delimiter);
+int		handle_heredoc(char *delimiter, char **env, int exit_status);
 
 /* Dahili komutlar */
 /* Built-in komut mu kontrol et */

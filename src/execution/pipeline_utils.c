@@ -6,11 +6,12 @@
 /*   By: ehabes <ehabes@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 13:52:00 by ehabes            #+#    #+#             */
-/*   Updated: 2025/07/20 14:56:59 by ehabes           ###   ########.fr       */
+/*   Updated: 2025/08/19 22:49:41 by ehabes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/execution.h"
+#include "../includes/parsing.h"
 
 int	setup_pipeline_resources(t_pipeline *pipeline, int ***pipes, pid_t **pids)
 {
@@ -26,12 +27,16 @@ int	setup_pipeline_resources(t_pipeline *pipeline, int ***pipes, pid_t **pids)
 	return (EXIT_SUCCESS);
 }
 
-static void	execute_child_command(int **pipes, int i, int cmd_count, t_cmd *cmd)
+static void	execute_child_command(int **pipes, int i, int cmd_count, \
+	t_cmd *cmd, char ***env)
 {
-	(void)cmd;
+	int	exit_status;
+
 	setup_pipe_redirection(pipes, i, cmd_count);
 	close_all_pipes(pipes, cmd_count - 1);
-	exit(EXIT_FAILURE);
+	setup_child_signals();
+	exit_status = execute_command(cmd, env);
+	exit(exit_status);
 }
 
 int	execute_pipeline_commands(t_pipeline *pipeline, int **pipes, pid_t *pids, \
@@ -52,10 +57,7 @@ int	execute_pipeline_commands(t_pipeline *pipeline, int **pipes, pid_t *pids, \
 			return (EXIT_FAILURE);
 		}
 		if (pids[i] == 0)
-		{
-			execute_child_command(pipes, i, pipeline->cmd_count, current);
-			execute_command(current, env);
-		}
+			execute_child_command(pipes, i, pipeline->cmd_count, current, env);
 		current = current->next;
 		i++;
 	}

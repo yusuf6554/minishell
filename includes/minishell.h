@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yukoc <yukoc@student.42kocaeli.com.tr>     +#+  +:+       +#+        */
+/*   By: ehabes <ehabes@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 21:53:55 by ehabes            #+#    #+#             */
-/*   Updated: 2025/06/04 23:15:21 by yukoc            ###   ########.fr       */
+/*   Updated: 2025/08/20 12:25:26 by ehabes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,6 +111,7 @@ typedef struct s_minishell
 }	t_minishell;
 
 extern volatile sig_atomic_t	g_signal;
+extern volatile sig_atomic_t	g_in_multiline;
 
 /* Hafıza yardımcıları */
 

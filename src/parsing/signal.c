@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   signal.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yukoc <yukoc@student.42kocaeli.com.tr>     +#+  +:+       +#+        */
+/*   By: ehabes <ehabes@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 13:38:39 by yukoc             #+#    #+#             */
-/*   Updated: 2025/08/08 20:39:57 by yukoc            ###   ########.fr       */
+/*   Updated: 2025/08/20 14:43:58 by ehabes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/parsing.h"
-#include "../../includes/execution.h"
+#include "../../includes/minishell.h"
 #include <readline/readline.h>
 #include <readline/history.h>
 
@@ -29,7 +29,10 @@ void	setup_child_signals(void)
 
 void	handle_sigint(int sig)
 {
+	extern volatile sig_atomic_t	g_signal;
+
 	(void)sig;
+	g_signal = SIGINT;
 	write(1, "\n", 1);
 	rl_on_new_line();
 	rl_replace_line("", 0);
@@ -40,5 +43,4 @@ void	handle_sigquit(int sig)
 {
 	(void)sig;
 	write(1, "Quit (core dumped)\n", 19);
-	exit(EXIT_FAILURE);
 }

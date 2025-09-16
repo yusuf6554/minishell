@@ -6,7 +6,7 @@
 /*   By: ehabes <ehabes@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 17:11:00 by ehabes            #+#    #+#             */
-/*   Updated: 2025/07/20 17:17:56 by ehabes           ###   ########.fr       */
+/*   Updated: 2025/08/20 14:35:57 by ehabes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,14 +33,38 @@ static char	*expand_exit_status(char *str, int exit_status)
 	return (result);
 }
 
+static int	should_expand_at_position(char *str, int pos)
+{
+	int	i;
+	int	in_single_quotes;
+	int	in_double_quotes;
+
+	i = 0;
+	in_single_quotes = 0;
+	in_double_quotes = 0;
+	while (i < pos)
+	{
+		if (!in_double_quotes && str[i] == '\'')
+			in_single_quotes = !in_single_quotes;
+		else if (!in_single_quotes && str[i] == '"')
+			in_double_quotes = !in_double_quotes;
+		i++;
+	}
+	return (!in_single_quotes);
+}
+
 char	*expand_variables(char *str, char **env, int exit_status)
 {
 	char	*result;
 	char	*expanded;
+	char	*dollar_pos;
 
 	if (!str || !ft_strchr(str, '$'))
 		return (NULL);
-	if (ft_strncmp(str, "$?", 2) == 0)
+	dollar_pos = ft_strchr(str, '$');
+	if (!should_expand_at_position(str, dollar_pos - str))
+		return (NULL);
+	if (ft_strncmp(dollar_pos, "$?", 2) == 0)
 		return (expand_exit_status(str, exit_status));
 	result = ft_strdup(str);
 	expanded = expand_env_vars(result, env);
@@ -95,19 +119,21 @@ static char	*process_single_var(char *result, char *var_start, char **env)
 	return (result);
 }
 
-char	*expand_env_vars(char *str, char **env)
+char	*expand_env_vars(char *input, char **env)
 {
+	char	*var_pos;
 	char	*result;
-	char	*var_start;
 
-	if (!str || !ft_strchr(str, '$'))
-		return (ft_strdup(str));
-	result = ft_strdup(str);
-	var_start = ft_strchr(result, '$');
-	while (var_start)
+	result = ft_strdup(input);
+	if (!result)
+		return (NULL);
+	var_pos = ft_strchr(result, '$');
+	while (var_pos)
 	{
-		result = process_single_var(result, var_start, env);
-		var_start = ft_strchr(result, '$');
+		result = process_single_var(result, var_pos, env);
+		if (!result)
+			return (NULL);
+		var_pos = ft_strchr(var_pos + 1, '$');
 	}
 	return (result);
 }

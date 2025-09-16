@@ -30,13 +30,33 @@ int	execute_pipeline(t_pipeline *pipeline, char ***env)
 
 int	execute_command(t_cmd *cmd, char ***env)
 {
+	int	original_stdin;
+	int	original_stdout;
+	int	exit_status;
+
 	if (!cmd || !cmd->argv || !cmd->argv[0])
 		return (EXIT_FAILURE);
-	if (setup_redirections(cmd->redirects) == -1)
+	original_stdout = dup(STDOUT_FILENO);
+	if (original_stdout == -1)
 		return (EXIT_FAILURE);
+	original_stdin = setup_redirections(cmd->redirects, *env, 0);
+	if (original_stdin == -1)
+	{
+		close(original_stdout);
+		return (EXIT_FAILURE);
+	}
 	if (is_builtin(cmd->argv[0]))
-		return (execute_builtin(cmd->argv, env));
-	return (execute_external_command(cmd, env));
+		exit_status = execute_builtin(cmd->argv, env);
+	else
+		exit_status = execute_external_command(cmd, env);
+	if (original_stdin > 0)
+	{
+		dup2(original_stdin, STDIN_FILENO);
+		close(original_stdin);
+	}
+	dup2(original_stdout, STDOUT_FILENO);
+	close(original_stdout);
+	return (exit_status);
 }
 
 int	execute_single_command(t_cmd *cmd, char ***env)

@@ -6,13 +6,15 @@
 /*   By: ehabes <ehabes@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 21:15:28 by yukoc             #+#    #+#             */
-/*   Updated: 2025/07/20 16:59:30 by ehabes           ###   ########.fr       */
+/*   Updated: 2025/08/20 14:40:56 by ehabes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 #include "../../includes/parsing.h"
 #include "../../includes/execution.h"
+#include <readline/readline.h>
+#include <readline/history.h>
 
 void	init_shell(char **envp, t_minishell *ms)
 {
@@ -46,9 +48,9 @@ void	cleanup_shell(t_minishell *ms)
 
 void	shell_loop(t_minishell *ms)
 {
-	char		*input;
-	t_token		*tokens;
-	t_pipeline	*pipeline;
+	char				*input;
+	t_token				*tokens;
+	t_pipeline			*pipeline;
 
 	while (1)
 	{
@@ -63,8 +65,12 @@ void	shell_loop(t_minishell *ms)
 		add_history(input);
 		tokens = tokenize_with_expansion(input, ms->env, ms->exit_status);
 		free_string(input);
+		if (!tokens)
+			continue; // Parse error
 		pipeline = parse_pipeline(tokens);
 		free_tokens(&tokens);
+		if (!pipeline)
+			continue; // Parse error
 		ms->exit_status = execute_pipeline(pipeline, &ms->env);
 		free_pipeline(&pipeline);
 	}

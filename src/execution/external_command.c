@@ -6,11 +6,12 @@
 /*   By: ehabes <ehabes@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 13:50:00 by ehabes            #+#    #+#             */
-/*   Updated: 2025/07/20 14:54:28 by ehabes           ###   ########.fr       */
+/*   Updated: 2025/08/15 15:44:07 by ehabes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/execution.h"
+#include "../includes/parsing.h"
 
 static char	*build_full_path(char *dir, char *cmd)
 {
@@ -72,6 +73,7 @@ char	*find_executable(char *cmd, char **env)
 
 static int	execute_child_process(char *executable, t_cmd *cmd, char ***env)
 {
+	setup_child_signals();
 	if (execve(executable, cmd->argv, *env) == -1)
 	{
 		perror_msg("execve");
@@ -101,7 +103,9 @@ int	execute_external_command(t_cmd *cmd, char ***env)
 	if (pid == 0)
 		return (execute_child_process(executable, cmd, env));
 	free(executable);
+	signal(SIGINT, SIG_IGN);
 	waitpid(pid, &status, 0);
+	setup_signals();
 	if (WIFEXITED(status))
 		return (WEXITSTATUS(status));
 	else if (WIFSIGNALED(status))

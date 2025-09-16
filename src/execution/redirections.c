@@ -6,13 +6,13 @@
 /*   By: ehabes <ehabes@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/12 16:18:42 by ehabes            #+#    #+#             */
-/*   Updated: 2025/07/20 14:49:54 by ehabes           ###   ########.fr       */
+/*   Updated: 2025/08/14 21:27:57 by ehabes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/execution.h"
 
-static int	handle_redirect_type(t_redirect *redirect)
+static int	handle_redirect_type(t_redirect *redirect, char **env, int es)
 {
 	if (redirect->type == REDIRECT_IN)
 		return (handle_input_redirect(redirect->file));
@@ -21,21 +21,25 @@ static int	handle_redirect_type(t_redirect *redirect)
 	else if (redirect->type == REDIRECT_APPEND)
 		return (handle_output_redirect(redirect->file, 1));
 	else if (redirect->type == REDIRECT_HEREDOC)
-		return (handle_heredoc(redirect->file));
+		return (handle_heredoc(redirect->file, env, es));
 	return (-1);
 }
 
-int	setup_redirections(t_redirect *redirects)
+int	setup_redirections(t_redirect *redirects, char **env, int exit_status)
 {
 	t_redirect	*current;
+	int			result;
 
 	if (!redirects)
 		return (0);
 	current = redirects;
 	while (current)
 	{
-		if (handle_redirect_type(current) == -1)
+		result = handle_redirect_type(current, env, exit_status);
+		if (result == -1)
 			return (-1);
+		if (result > 0 && current->type == REDIRECT_HEREDOC)
+			return (result);
 		current = current->next;
 	}
 	return (0);
