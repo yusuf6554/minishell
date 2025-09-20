@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   shell_core.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ehabes <ehabes@student.42kocaeli.com.tr    +#+  +:+       +#+        */
+/*   By: yukoc <yukoc@student.42kocaeli.com.tr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 21:15:28 by yukoc             #+#    #+#             */
-/*   Updated: 2025/08/20 14:40:56 by ehabes           ###   ########.fr       */
+/*   Updated: 2025/09/20 13:16:34 by yukoc            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,9 @@
 
 void	init_shell(char **envp, t_minishell *ms)
 {
+	int	i;
+
+	i = 0;
 	ft_memset(ms, 0, sizeof(t_minishell));
 	ms->env = env_copy(envp);
 	if (!ms->env)
@@ -25,6 +28,15 @@ void	init_shell(char **envp, t_minishell *ms)
 		error_msg(NULL, NULL, "memory allocation failed");
 		exit(EXIT_FAILURE);
 	}
+	i = ft_atoi(ft_getenv("SHLVL", ms->env)) + 1;
+	if (i <= 1)
+		i = 1;
+	else if (i > 1000)
+	{
+		i = 1;
+		error_msg("minishell", "SHLVL", "warning: shell level too high, resetting to 1");
+	}
+	ms->env = env_add_var(ms->env, "SHLVL", ft_itoa(i));
 	ms->exit_status = 0;
 	ms->in_heredoc = 0;
 	ms->pid_count = 0;

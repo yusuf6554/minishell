@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_cd.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ehabes <ehabes@student.42kocaeli.com.tr    +#+  +:+       +#+        */
+/*   By: yukoc <yukoc@student.42kocaeli.com.tr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/12 16:17:18 by ehabes            #+#    #+#             */
-/*   Updated: 2025/07/12 16:17:21 by ehabes           ###   ########.fr       */
+/*   Updated: 2025/09/20 12:40:17 by yukoc            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,22 @@
 
 static int	update_pwd_env(char ***env, char *old_pwd, char *new_pwd)
 {
-	(void)env;
-	(void)old_pwd;
-	(void)new_pwd;
+	if (old_pwd)
+	{
+		if (set_env_var(env, "OLDPWD", old_pwd) == -1)
+		{
+			perror_msg("cd");
+			return (-1);
+		}
+	}
+	if (new_pwd)
+	{
+		if (set_env_var(env, "PWD", new_pwd) == -1)
+		{
+			perror_msg("cd");
+			return (-1);
+		}
+	}
 	return (0);
 }
 

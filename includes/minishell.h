@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ehabes <ehabes@student.42kocaeli.com.tr    +#+  +:+       +#+        */
+/*   By: yukoc <yukoc@student.42kocaeli.com.tr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 21:53:55 by ehabes            #+#    #+#             */
-/*   Updated: 2025/08/20 12:25:26 by ehabes           ###   ########.fr       */
+/*   Updated: 2025/09/20 13:03:10 by yukoc            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,6 @@ typedef struct s_minishell
 }	t_minishell;
 
 extern volatile sig_atomic_t	g_signal;
-extern volatile sig_atomic_t	g_in_multiline;
 
 /* Hafıza yardımcıları */
 
@@ -142,8 +141,10 @@ char		**env_copy(char **env);
 void		env_free(char **env);
 /* Env değişken indexi */
 int			env_find_index(char **env, char *name);
-/* // Env değişken adı validasyonu */
+/* Env değişken adı validasyonu */
 int			env_validate_name(char *name);
+/* Env değişken ayarla */
+int			set_env_var(char ***env, char *name, char *value);
 
 /* Hata yönetimi */
 

@@ -6,7 +6,7 @@
 /*   By: yukoc <yukoc@student.42kocaeli.com.tr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 20:56:14 by yukoc             #+#    #+#             */
-/*   Updated: 2025/05/30 22:29:12 by yukoc            ###   ########.fr       */
+/*   Updated: 2025/09/20 12:54:27 by yukoc            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,4 +112,25 @@ char	**env_remove_var(char **env, char *name)
 	if (!new_env)
 		return (NULL);
 	return (new_env);
+}
+
+int	set_env_var(char ***env, char *name, char *value)
+{
+	char	**new_env;
+
+	if (!env || !name || !env_validate_name(name))
+		return (-1);
+	if (!*env)
+	{
+		new_env = env_add_var(NULL, name, value);
+		if (!new_env)
+			return (-1);
+		*env = new_env;
+		return (0);
+	}
+	new_env = env_add_var(*env, name, value);
+	if (!new_env)
+		return (-1);
+	*env = new_env;
+	return (0);
 }
