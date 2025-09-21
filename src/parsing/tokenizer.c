@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ehabes <ehabes@student.42kocaeli.com.tr    +#+  +:+       +#+        */
+/*   By: yukoc <yukoc@student.42kocaeli.com.tr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/26 13:43:37 by yukoc             #+#    #+#             */
-/*   Updated: 2025/08/20 14:37:42 by ehabes           ###   ########.fr       */
+/*   Updated: 2025/09/21 14:03:38 by yukoc            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,10 +104,30 @@ t_token	*tokenize_with_expansion(char *input, char **env, int exit_status)
 {
 	char	**split;
 	t_token	*tokens;
+	int		i;
 
 	split = quote_aware_split(input);
 	if (!split)
 		return (NULL);
+	if (split[0][0] == '|')
+	{
+		if (split[0][1] == '|')
+			error_msg("minishell", NULL, "syntax error near unexpected token `||'");
+		else
+			error_msg("minishell", NULL, "syntax error near unexpected token `|'");
+		free_string_array(split);
+		return (NULL);
+	}
+	i = count_string_array(split);
+	if (split[i - 1][0] == '|')
+	{
+		if (split[i - 1][1] == '|')
+			error_msg("minishell", NULL, "syntax error near unexpected token `||'");
+		else
+			error_msg("minishell", NULL, "syntax error near unexpected token `|'");
+		free_string_array(split);
+		return (NULL);
+	}
 	tokens = process_expanded_tokens(split, env, exit_status);
 	free_string_array(split);
 	return (tokens);

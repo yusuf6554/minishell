@@ -40,6 +40,6 @@ char *quote = '\''
     echo "'$HOME'" -> çıktıda '/home/ehabes' yazmalı. yani çift tırnak açıldıysa kapanana kadar tırnak içerisinde ne varsa aynı şekilde alınmalı
     echo " -> tırnak kapanmadığında hata mesajı verilmeli. > promptu açmaya gerek yok
     echo hi|echo hh (pipe ların dibinde space olsa da olmasa da, pipe arasındakiler her zaman input olarak alınmalı)
-    | (sadece pipe girdisinde hata mesajı vermeli)
-    echo hi | (input sonunda pipe varsa hata mesajı vermeli)
-    | echo hi ( string başında pipe varsa hata meajı vermeli)
+    | (sadece pipe girdisinde hata mesajı vermeli) --- DÜZELTİLDİ
+    echo hi | (input sonunda pipe varsa hata mesajı vermeli) --- DÜZELTİLDİ
+    | echo hi ( string başında pipe varsa hata meajı vermeli) --- DÜZELTİLDİ
