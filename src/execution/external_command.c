@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   external_command.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ehabes <ehabes@student.42kocaeli.com.tr    +#+  +:+       +#+        */
+/*   By: yukoc <yukoc@student.42kocaeli.com.tr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 13:50:00 by ehabes            #+#    #+#             */
-/*   Updated: 2025/08/15 15:44:07 by ehabes           ###   ########.fr       */
+/*   Updated: 2025/09/21 13:08:01 by yukoc            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,7 @@ int	execute_external_command(t_cmd *cmd, char ***env)
 		command_not_found(cmd->argv[0]);
 		return (EXIT_NOT_FOUND);
 	}
+	set_env_var(env, "_", executable);
 	pid = create_process();
 	if (pid == -1)
 		return (free(executable), EXIT_FAILURE);

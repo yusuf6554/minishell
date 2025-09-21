@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_echo.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ehabes <ehabes@student.42kocaeli.com.tr    +#+  +:+       +#+        */
+/*   By: yukoc <yukoc@student.42kocaeli.com.tr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/12 16:17:24 by ehabes            #+#    #+#             */
-/*   Updated: 2025/07/20 17:08:34 by ehabes           ###   ########.fr       */
+/*   Updated: 2025/09/21 13:33:20 by yukoc            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,23 +36,53 @@ static char	*remove_quotes(char *str)
 	return (result);
 }
 
+static int	check_for_n_flags(char **argv, int *index)
+{
+	int	i;
+	int	j;
+	int	flag_found;
+
+	i = 1;
+	j = 0;
+	flag_found = 0;
+	while (argv[i])
+	{
+		if (argv[i][0] != '-')
+			break ;
+		j = 1;
+		while (argv[i][j] && argv[i][j] == 'n')
+			j++;
+		if (argv[i][j] != '\0' || j == 1)
+			break ;
+		flag_found++;
+		i++;
+	}
+	*index = i;
+	return (flag_found);
+}
+
 int	builtin_echo(char **argv)
 {
 	int		i;
 	int		newline;
 	char	*unquoted;
+	int		dash_skipped;
 
 	if (!argv)
 		return (EXIT_FAILURE);
 	newline = 1;
 	i = 1;
-	if (argv[1] && ft_strncmp(argv[1], "-n", 2) == 0 && argv[1][2] == '\0')
-	{
+	dash_skipped = 0;
+	if (argv[1] && check_for_n_flags(argv, &i))
 		newline = 0;
-		i = 2;
-	}
 	while (argv[i])
 	{
+		if (argv[i][0] == '-' && !dash_skipped)
+		{
+			if (argv[i][1] == '\0')
+				i++;
+			dash_skipped = 1;
+		}
 		unquoted = remove_quotes(argv[i]);
 		ft_putstr_fd(unquoted, STDOUT_FILENO);
 		free(unquoted);

@@ -6,7 +6,7 @@
 /*   By: yukoc <yukoc@student.42kocaeli.com.tr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 21:15:28 by yukoc             #+#    #+#             */
-/*   Updated: 2025/09/20 13:16:34 by yukoc            ###   ########.fr       */
+/*   Updated: 2025/09/21 13:09:27 by yukoc            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,25 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 
+static char	**env_create_default(void);
+
 void	init_shell(char **envp, t_minishell *ms)
 {
 	int	i;
 
 	i = 0;
 	ft_memset(ms, 0, sizeof(t_minishell));
-	ms->env = env_copy(envp);
+	if (!envp || !*envp)
+	{
+		ms->env = env_create_default();
+		if (!ms->env)
+		{
+			error_msg(NULL, NULL, "memory allocation failed");
+			exit(EXIT_FAILURE);
+		}
+	}
+	else
+		ms->env = env_copy(envp);
 	if (!ms->env)
 	{
 		error_msg(NULL, NULL, "memory allocation failed");
@@ -86,4 +98,20 @@ void	shell_loop(t_minishell *ms)
 		ms->exit_status = execute_pipeline(pipeline, &ms->env);
 		free_pipeline(&pipeline);
 	}
+}
+
+static char	**env_create_default(void)
+{
+	char	**default_env;
+
+	default_env = malloc(sizeof(char *) * 6);
+	if (!default_env)
+		return (NULL);
+	default_env[0] = ft_strdup("OLDPWD=");
+	default_env[1] = ft_strdup("PATH=/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/sbin:/bin:/sbin");
+	default_env[2] = ft_strjoin("PWD=", getcwd(NULL, 0));
+	default_env[3] = ft_strdup("SHLVL=1");
+	default_env[4] = ft_strdup("_=/usr/bin/env");
+	default_env[5] = NULL;
+	return (default_env);
 }

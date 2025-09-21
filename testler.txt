@@ -1,0 +1,45 @@
+
+EXECUTOR
+OLDPWD, PWD  yolları  güncellenmiyo --- DÜZELTİLDİ
+SHLVL güncellennmiyor (her içç içe minishell girilince bu değer güncellemeli) --- DÜZELTİLDİ
+env -i ./minishell  (bashtan minshell e girilirken env değişkenlerinden bazıları alınmalı: PWD OLDPWD SHLVL PATH bu değişkenler tek bir fonskiyon içerisinde set edilmeli. env değişkenlerini güncellemek için kullanılan fonksiyon burada da kullanılabilir) --- DÜZELTİLDİ
+echo -n aşşağı satıra geçmesini engelliyor (çalışıyor), echo -nnn aynı şekilde tepki vermeli çalışmıyor, echo -nnn -n aynı şekilde tepki verilmeli. --- DÜZELTİLDİ
+
+HEREDOC
+cat << delimiter
+> content1
+> content2
+> delimiter
+
+parserda
+cat <<str (<< operatörü ile str arasında space olmasa bile çalışmalı)
+<< a (başına cat yazılmasa bile heredoc açılmalı)
+cat<< a (space yoksa bile çalışmalı)
+
+executor
+cat << a << b (birden fazla heeredoc açılırsa heredoclar sırasıyla işlenmeli. burada önce a girdisi, sonra b girdisi ile heredoclar kapanmalı)
+birden fazla heredoc açıldığında son heredoc contenti ekrana yazdıırlmalı (cat << str1 << str2 : str1 den sonra str2 girildikten sonra, herodoctan çıkmadan önce ki son content ekrana yazılmalı (str2 adı hariç))
+cat << a > file.txt (heredoc içeriği file.txt dosyasına yazılmalı dosya yönlendirmeleri doğru yapılmıyor)
+cat << a < nn.txt (burada heredoc contenti açılmalı, heredoc kapandıktan sonra nn.txt içeriği yazdırılmalı)
+cat  nn.txt << a (HER ZAMAN İLK ÖNCE HEREDOC (<<) İŞLENMELİ)
+delimiter tırnaklı ise ( cat << "a" ), girilen contentler expand edilmemeli
+delimiter tırnaksız ise ( cat << a ), expand edilmeli
+cat << a 
+> "$HOME" expand edilmeli
+cat << str > file.txt < ff.txt (sstr yazılana kadar heredoc contenti alınır. daha sonra, ff.txt içeriği file.txt ye yazılır)
+cat << a > ff.txt < a.txt (programdan çıkıyor)
+cat << a < a.txt ( programdan çıkıyor)
+minishell$ echo hi > ttr.txt | echo hi | cat << a
+> > hi
+minishell$ 
+
+PARSERDA
+tırnak kontorlünde iki değişken tanımlanacak
+int quote_flag = 0
+char *quote = '\''
+    echo "'$HOME'" -> çıktıda '/home/ehabes' yazmalı. yani çift tırnak açıldıysa kapanana kadar tırnak içerisinde ne varsa aynı şekilde alınmalı
+    echo " -> tırnak kapanmadığında hata mesajı verilmeli. > promptu açmaya gerek yok
+    echo hi|echo hh (pipe ların dibinde space olsa da olmasa da, pipe arasındakiler her zaman input olarak alınmalı)
+    | (sadece pipe girdisinde hata mesajı vermeli)
+    echo hi | (input sonunda pipe varsa hata mesajı vermeli)
+    | echo hi ( string başında pipe varsa hata meajı vermeli)
