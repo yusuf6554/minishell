@@ -6,7 +6,7 @@
 /*   By: yukoc <yukoc@student.42kocaeli.com.tr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 21:15:28 by yukoc             #+#    #+#             */
-/*   Updated: 2025/09/21 13:09:27 by yukoc            ###   ########.fr       */
+/*   Updated: 2025/09/21 13:38:49 by yukoc            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,7 @@ static char	**env_create_default(void)
 	default_env[0] = ft_strdup("OLDPWD=");
 	default_env[1] = ft_strdup("PATH=/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/sbin:/bin:/sbin");
 	default_env[2] = ft_strjoin("PWD=", getcwd(NULL, 0));
-	default_env[3] = ft_strdup("SHLVL=1");
+	default_env[3] = ft_strdup("SHLVL=0");
 	default_env[4] = ft_strdup("_=/usr/bin/env");
 	default_env[5] = NULL;
 	return (default_env);
