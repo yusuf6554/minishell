@@ -14,6 +14,8 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 
+extern volatile sig_atomic_t	g_signal;
+
 int	is_empty_input(char *input)
 {
 	char	*trimmed;
@@ -55,22 +57,54 @@ static int	has_unclosed_quotes(char *input)
 
 static void	multiline_sigint_handler(int sig)
 {
-	extern volatile sig_atomic_t	g_signal;
-
-	(void)sig;
-	g_signal = SIGINT;
+	g_signal = sig;
 	write(1, "\n", 1);
 	rl_on_new_line();
 	rl_replace_line("", 0);
 	rl_done = 1;
 }
 
+static char	*handle_multiline_error(char *result, char *line,
+	void (*old_handler)(int))
+{
+	free_string(result);
+	if (line)
+		free_string(line);
+	rl_catch_signals = 1;
+	signal(SIGINT, old_handler);
+	g_signal = 0;
+	return (ft_strdup(""));
+}
+
+static char	*join_input_lines(char *result, char *line, void (*old_handler)(int))
+{
+	char	*temp;
+
+	temp = ft_strjoin(result, "\n");
+	free_string(result);
+	if (!temp)
+	{
+		free_string(line);
+		rl_catch_signals = 1;
+		signal(SIGINT, old_handler);
+		return (NULL);
+	}
+	result = ft_strjoin(temp, line);
+	free_string(temp);
+	free_string(line);
+	if (!result)
+	{
+		rl_catch_signals = 1;
+		signal(SIGINT, old_handler);
+		return (NULL);
+	}
+	return (result);
+}
+
 static char	*read_multiline_input(char *initial_input)
 {
 	char	*line;
 	char	*result;
-	char	*temp;
-	extern volatile sig_atomic_t	g_signal;
 	void	(*old_handler)(int);
 
 	result = ft_strdup(initial_input);
@@ -83,68 +117,41 @@ static char	*read_multiline_input(char *initial_input)
 		g_signal = 0;
 		line = readline("> ");
 		if (!line || g_signal == SIGINT)
-		{
-			free_string(result);
-			if (line)
-				free_string(line);
-			rl_catch_signals = 1;
-			signal(SIGINT, old_handler);
-			g_signal = 0;
-			return (ft_strdup(""));
-		}
-		temp = ft_strjoin(result, "\n");
-		free_string(result);
-		if (!temp)
-		{
-			free_string(line);
-			rl_catch_signals = 1;
-			signal(SIGINT, old_handler);
-			return (NULL);
-		}
-		result = ft_strjoin(temp, line);
-		free_string(temp);
-		free_string(line);
+			return (handle_multiline_error(result, line, old_handler));
+		result = join_input_lines(result, line, old_handler);
 		if (!result)
-		{
-			rl_catch_signals = 1;
-			signal(SIGINT, old_handler);
 			return (NULL);
-		}
 	}
 	rl_catch_signals = 1;
 	signal(SIGINT, old_handler);
 	return (result);
 }
 
+static char	*handle_input_error(void)
+{
+	if (g_signal == SIGINT)
+	{
+		g_signal = 0;
+		return (ft_strdup(""));
+	}
+	return (NULL);
+}
+
 char	*read_input(void)
 {
 	char	*input;
 	char	*final_input;
-	extern volatile sig_atomic_t	g_signal;
 
 	g_signal = 0;
 	input = readline(PROMPT);
 	if (!input)
-	{
-		if (g_signal == SIGINT)
-		{
-			g_signal = 0;
-			return (ft_strdup(""));
-		}
-		return (NULL);
-	}
+		return (handle_input_error());
 	if (has_unclosed_quotes(input))
 	{
 		final_input = read_multiline_input(input);
 		free_string(input);
 		if (!final_input)
-		{
-			if (g_signal == SIGINT)
-			{
-				g_signal = 0;
-				return (ft_strdup(""));
-			}
-		}
+			return (handle_input_error());
 		return (final_input);
 	}
 	return (input);

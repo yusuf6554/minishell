@@ -6,7 +6,7 @@
 /*   By: yukoc <yukoc@student.42kocaeli.com.tr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 21:53:55 by ehabes            #+#    #+#             */
-/*   Updated: 2025/09/20 13:03:10 by yukoc            ###   ########.fr       */
+/*   Updated: 2025/10/01 10:06:58 by yukoc            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,8 @@ typedef struct s_redirect
 {
 	t_redirect_type		type;
 	char				*file;
+	char				*delimiter;
+	char				*content;
 	int					fd;
 	struct s_redirect	*next;
 }	t_redirect;
@@ -109,8 +111,6 @@ typedef struct s_minishell
 	pid_t				*pids;
 	int					pid_count;
 }	t_minishell;
-
-extern volatile sig_atomic_t	g_signal;
 
 /* Hafıza yardımcıları */
 
@@ -176,6 +176,10 @@ void		shell_loop(t_minishell *ms);
 char		*read_input(void);
 /* Boş input kontrolü */
 int			is_empty_input(char *input);
+/* Env'i başlat */
+void		init_env(t_minishell *ms, char **envp);
+/* SHLVL ayarla */
+void		set_shlvl(t_minishell *ms);
 
 /* Başlatma ve temizleme */
 

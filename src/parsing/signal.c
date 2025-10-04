@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signal.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ehabes <ehabes@student.42kocaeli.com.tr    +#+  +:+       +#+        */
+/*   By: yukoc <yukoc@student.42kocaeli.com.tr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 13:38:39 by yukoc             #+#    #+#             */
-/*   Updated: 2025/08/20 14:43:58 by ehabes           ###   ########.fr       */
+/*   Updated: 2025/09/30 11:37:22 by yukoc            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 #include "../../includes/minishell.h"
 #include <readline/readline.h>
 #include <readline/history.h>
+
+extern volatile sig_atomic_t	g_signal;
 
 void	setup_signals(void)
 {
@@ -29,10 +31,7 @@ void	setup_child_signals(void)
 
 void	handle_sigint(int sig)
 {
-	extern volatile sig_atomic_t	g_signal;
-
-	(void)sig;
-	g_signal = SIGINT;
+	g_signal = sig;
 	write(1, "\n", 1);
 	rl_on_new_line();
 	rl_replace_line("", 0);
@@ -41,6 +40,6 @@ void	handle_sigint(int sig)
 
 void	handle_sigquit(int sig)
 {
-	(void)sig;
+	g_signal = sig;
 	write(1, "Quit (core dumped)\n", 19);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ehabes <ehabes@student.42kocaeli.com.tr    +#+  +:+       +#+        */
+/*   By: yukoc <yukoc@student.42kocaeli.com.tr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 21:39:49 by yukoc             #+#    #+#             */
-/*   Updated: 2025/07/20 17:16:53 by ehabes           ###   ########.fr       */
+/*   Updated: 2025/10/01 10:08:41 by yukoc            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,6 +147,8 @@ static t_redirect	*create_redirect(t_token_type type, char *file)
 	redirect->file = NULL;
 	redirect->fd = -1;
 	redirect->next = NULL;
+	redirect->delimiter = NULL;
+	redirect->content = NULL;
 	if (file)
 	{
 		redirect->file = ft_strdup(file);

@@ -6,7 +6,7 @@
 /*   By: yukoc <yukoc@student.42kocaeli.com.tr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 21:15:28 by yukoc             #+#    #+#             */
-/*   Updated: 2025/09/21 13:47:01 by yukoc            ###   ########.fr       */
+/*   Updated: 2025/10/01 09:50:42 by yukoc            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,18 @@ static char	**env_create_default(void);
 
 void	init_shell(char **envp, t_minishell *ms)
 {
-	int	i;
-
-	i = 0;
 	ft_memset(ms, 0, sizeof(t_minishell));
+	ms->exit_status = 0;
+	ms->in_heredoc = 0;
+	ms->pid_count = 0;
+	ms->env = NULL;
+	ms->pids = NULL;
+	init_env(ms, envp);
+	set_shlvl(ms);
+}
+
+void	init_env(t_minishell *ms, char **envp)
+{
 	if (!envp || !*envp)
 	{
 		ms->env = env_create_default();
@@ -34,12 +42,20 @@ void	init_shell(char **envp, t_minishell *ms)
 		}
 	}
 	else
-		ms->env = env_copy(envp);
-	if (!ms->env)
 	{
-		error_msg(NULL, NULL, "memory allocation failed");
-		exit(EXIT_FAILURE);
+		ms->env = env_copy(envp);
+		if (!ms->env)
+		{
+			error_msg(NULL, NULL, "memory allocation failed");
+			exit(EXIT_FAILURE);
+		}
 	}
+}
+
+void	set_shlvl(t_minishell *ms)
+{
+	int	i;
+
 	i = ft_atoi(ft_getenv("SHLVL", ms->env)) + 1;
 	if (i <= 1)
 		i = 1;
@@ -49,10 +65,6 @@ void	init_shell(char **envp, t_minishell *ms)
 		error_msg("minishell", "SHLVL", "warning: shell level too high, resetting to 1");
 	}
 	ms->env = env_add_var(ms->env, "SHLVL", ft_itoa(i));
-	ms->exit_status = 0;
-	ms->in_heredoc = 0;
-	ms->pid_count = 0;
-	ms->pids = NULL;
 }
 
 void	cleanup_shell(t_minishell *ms)
@@ -95,7 +107,7 @@ void	shell_loop(t_minishell *ms)
 		free_tokens(&tokens);
 		if (!pipeline)
 			continue; // Parse error
-		ms->exit_status = execute_pipeline(pipeline, &ms->env);
+		ms->exit_status = execute_command_main(pipeline, ms);
 		free_pipeline(&pipeline);
 	}
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ehabes <ehabes@student.42kocaeli.com.tr    +#+  +:+       +#+        */
+/*   By: yukoc <yukoc@student.42kocaeli.com.tr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 14:20:17 by yukoc             #+#    #+#             */
-/*   Updated: 2025/08/13 15:11:55 by ehabes           ###   ########.fr       */
+/*   Updated: 2025/10/01 10:00:57 by yukoc            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,11 @@ int		execute_pipeline(t_pipeline *pipeline, char ***env);
 /* Tek komutu çalıştır */
 int		execute_command(t_cmd *cmd, char ***env);
 /* Basit komut çalıştır */
-int		execute_single_command(t_cmd *cmd, char ***env);
+int		execute_single_command(t_cmd *cmd, t_minishell *ms);
 /* Harici komut çalıştır */
 int		execute_external_command(t_cmd *cmd, char ***env);
+/* Ana komut yürütücüsü */
+int		execute_command_main(t_pipeline *pipeline, t_minishell *ms);
 
 /* Pipeline yardımcıları */
 /* Pipeline kaynaklarını hazırla */

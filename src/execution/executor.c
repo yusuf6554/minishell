@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ehabes <ehabes@student.42kocaeli.com.tr    +#+  +:+       +#+        */
+/*   By: yukoc <yukoc@student.42kocaeli.com.tr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/12 16:18:15 by ehabes            #+#    #+#             */
-/*   Updated: 2025/07/12 16:18:15 by ehabes           ###   ########.fr       */
+/*   Updated: 2025/10/01 09:59:56 by yukoc            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ int	execute_command(t_cmd *cmd, char ***env)
 	return (exit_status);
 }
 
-int	execute_single_command(t_cmd *cmd, char ***env)
+int	execute_single_command(t_cmd *cmd, t_minishell *ms)
 {
 	int	original_stdin;
 	int	original_stdout;
@@ -71,12 +71,15 @@ int	execute_single_command(t_cmd *cmd, char ***env)
 	original_stdout = dup(STDOUT_FILENO);
 	if (original_stdin == -1 || original_stdout == -1)
 		return (EXIT_FAILURE);
-	exit_status = execute_command(cmd, env);
+	exit_status = execute_command(cmd, ms->env);
 	dup2(original_stdin, STDIN_FILENO);
 	dup2(original_stdout, STDOUT_FILENO);
 	close(original_stdin);
 	close(original_stdout);
-	return (exit_status);
+	ms->exit_status = exit_status;
+	if (exit_status == 0)
+		return (1);
+	return (0);
 }
 
 pid_t	create_process(void)
@@ -115,4 +118,21 @@ int	wait_for_processes(pid_t *pids, int count)
 		i++;
 	}
 	return (last_exit_status);
+}
+
+int	execute_command_main(t_pipeline *pipeline, t_minishell *ms)
+{
+	int	exit_status;
+
+	if (handle_heredocs(pipeline, ms) == -1)
+		return (-1);
+	if (pipeline->cmd_count > 1)
+	{
+		exit_status = execute_pipeline(pipeline, &ms->env);
+		ms->exit_status = exit_status;
+		if (exit_status == 0)
+			return (1);
+		return (0);
+	}
+	return (execute_single_command(pipeline->commands, ms));
 }
