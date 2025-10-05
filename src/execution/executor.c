@@ -6,7 +6,7 @@
 /*   By: yukoc <yukoc@student.42kocaeli.com.tr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/12 16:18:15 by ehabes            #+#    #+#             */
-/*   Updated: 2025/10/01 09:59:56 by yukoc            ###   ########.fr       */
+/*   Updated: 2025/10/05 18:33:14 by yukoc            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ int	execute_single_command(t_cmd *cmd, t_minishell *ms)
 	original_stdout = dup(STDOUT_FILENO);
 	if (original_stdin == -1 || original_stdout == -1)
 		return (EXIT_FAILURE);
-	exit_status = execute_command(cmd, ms->env);
+	exit_status = execute_command(cmd, &ms->env);
 	dup2(original_stdin, STDIN_FILENO);
 	dup2(original_stdout, STDOUT_FILENO);
 	close(original_stdin);

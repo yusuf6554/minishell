@@ -6,7 +6,7 @@
 /*   By: yukoc <yukoc@student.42kocaeli.com.tr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 14:50:00 by ehabes            #+#    #+#             */
-/*   Updated: 2025/10/01 09:39:34 by yukoc            ###   ########.fr       */
+/*   Updated: 2025/10/05 18:32:08 by yukoc            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,54 +78,64 @@ static void	heredoc_child_process(int *pfd, char *delim, char **env, int es)
 	exit(EXIT_SUCCESS);
 }
 
-static int	setup_heredoc_parent(int *pipe_fd, pid_t pid)
+static int	heredoc_read_parent(int	*pipe_fd, t_redirect *rdr)
 {
-	int	original_stdin;
+	char	*content;
 
-	original_stdin = dup(STDIN_FILENO);
-	if (original_stdin == -1)
-	{
-		close(pipe_fd[0]);
-		close(pipe_fd[1]);
-		return (perror_msg("dup"), -1);
-	}
 	close(pipe_fd[1]);
-	if (dup2(pipe_fd[0], STDIN_FILENO) == -1)
-	{
-		close(original_stdin);
-		return (close(pipe_fd[0]), perror_msg("dup2"), -1);
-	}
+	content = read_heredoc_content(pipe_fd[0]);
 	close(pipe_fd[0]);
-	signal(SIGINT, SIG_IGN);
-	waitpid(pid, NULL, 0);
-	setup_signals();
-	return (original_stdin);
+	if (!content)
+		return (-1);
+	if (rdr->content)
+		free_string(rdr->content);
+	rdr->content = content;
+	return (0);
 }
 
-int	handle_heredoc(char *delimiter, char **env, int exit_status)
+static int	setup_heredoc_parent(int *pipe_fd, pid_t pid, t_redirect *rdr)
+{
+	int	status;
+	int result;
+
+	result = heredoc_read_parent(pipe_fd, rdr);
+	waitpid(pid, &status, 0);
+	setup_signals();
+	if (result == -1)
+		return (-1);
+	if (WIFEXITED(status) && WEXITSTATUS(status) == 130)
+	{
+		if (rdr->content)
+			return (free_string(rdr->content), rdr->content = NULL, 130);
+		else
+			return (130);
+	}
+	return (0);
+}
+
+int	handle_heredoc(t_redirect *rdr, t_minishell *ms)
 {
 	int		pipe_fd[2];
 	pid_t	pid;
-	char	*expanded_delimiter;
+	char	*exp_delimiter;
 
-	if (!delimiter)
+	if (!rdr || !rdr->file || !ms)
 		return (-1);
-	expanded_delimiter = expand_variables(delimiter, env, exit_status);
-	if (!expanded_delimiter)
-		expanded_delimiter = ft_strdup(delimiter);
+	exp_delimiter = expand_variables(rdr->file, ms->env, ms->exit_status);
+	if (!exp_delimiter)
+		exp_delimiter = ft_strdup(rdr->file);
 	if (pipe(pipe_fd) == -1)
-		return (free(expanded_delimiter), perror_msg("pipe"), -1);
+		return (free(exp_delimiter), perror_msg("pipe"), -1);
 	pid = fork();
 	if (pid == -1)
 	{
-		free(expanded_delimiter);
+		free(exp_delimiter);
 		close(pipe_fd[0]);
 		close(pipe_fd[1]);
 		return (perror_msg("fork"), -1);
 	}
 	if (pid == 0)
-		heredoc_child_process(pipe_fd, expanded_delimiter, env, exit_status);
-	free(expanded_delimiter);
-	return (setup_heredoc_parent(pipe_fd, pid));
+		heredoc_child_process(pipe_fd, exp_delimiter, ms->env, ms->exit_status);
+	free_string(exp_delimiter);
+	return (setup_heredoc_parent(pipe_fd, pid, rdr));
 }
-

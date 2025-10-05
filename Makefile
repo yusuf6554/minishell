@@ -1,7 +1,7 @@
 NAME = minishell
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g
+CFLAGS = -Wall -Wextra -Werror -ggdb
 RM = rm -f
 LDFLAGS = -lreadline
 
@@ -20,7 +20,8 @@ SRC_FILES = utils/shell_core.c utils/shell_input.c \
 			execution/builtins/builtin_echo.c execution/builtins/builtin_cd.c \
 			execution/builtins/builtin_pwd.c execution/builtins/builtin_export.c \
 			execution/builtins/builtin_unset.c execution/builtins/builtin_env.c \
-			execution/builtins/builtin_exit.c
+			execution/builtins/builtin_exit.c execution/executor_heredoc.c \
+			execution/heredoc_read.c utils/gnl.c utils/gnl_utils.c
 
 SRCS_DIR = src
 SRCS = $(MAIN_SRC) $(addprefix $(SRCS_DIR)/, $(SRC_FILES))

@@ -6,7 +6,7 @@
 /*   By: yukoc <yukoc@student.42kocaeli.com.tr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 21:53:55 by ehabes            #+#    #+#             */
-/*   Updated: 2025/10/01 10:06:58 by yukoc            ###   ########.fr       */
+/*   Updated: 2025/10/05 18:28:48 by yukoc            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,9 +73,9 @@ typedef struct s_redirect
 {
 	t_redirect_type		type;
 	char				*file;
-	char				*delimiter;
 	char				*content;
 	int					fd;
+	int					quoted;
 	struct s_redirect	*next;
 }	t_redirect;
 
@@ -187,5 +187,10 @@ void		set_shlvl(t_minishell *ms);
 void		init_shell(char **envp, t_minishell *ms);
 /* Shell temizleme */
 void		cleanup_shell(t_minishell *ms);
+
+/* GNL yardımcıları */
+char		*get_next_line(int fd);
+char		*ft_strjoin_gnl(char *s1, char *s2);
+char		*ft_strchr_gnl(char *s, int c);
 
 #endif

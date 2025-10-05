@@ -6,7 +6,7 @@
 /*   By: yukoc <yukoc@student.42kocaeli.com.tr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 14:20:17 by yukoc             #+#    #+#             */
-/*   Updated: 2025/10/01 10:00:57 by yukoc            ###   ########.fr       */
+/*   Updated: 2025/10/05 18:11:13 by yukoc            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,11 @@ int		handle_input_redirect(char *file);
 /* Output redirection */
 int		handle_output_redirect(char *file, int append);
 /* Heredoc işle */
-int		handle_heredoc(char *delimiter, char **env, int exit_status);
+int		handle_heredoc(t_redirect *redir, t_minishell *ms);
+/* Tüm heredoc'ları işle */
+int		handle_heredocs(t_pipeline *pipeline, t_minishell *ms);
+/* Heredoc içeriğini oku */
+char	*read_heredoc_content(int fd);
 
 /* Dahili komutlar */
 /* Built-in komut mu kontrol et */

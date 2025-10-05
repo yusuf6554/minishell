@@ -6,7 +6,7 @@
 /*   By: yukoc <yukoc@student.42kocaeli.com.tr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/12 16:18:42 by ehabes            #+#    #+#             */
-/*   Updated: 2025/10/01 09:39:19 by yukoc            ###   ########.fr       */
+/*   Updated: 2025/10/05 18:10:36 by yukoc            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,16 @@
 
 static int	handle_redirect_type(t_redirect *redirect, char **env, int es)
 {
+	(void)env;
+	(void)es;
 	if (redirect->type == REDIRECT_IN)
 		return (handle_input_redirect(redirect->file));
 	else if (redirect->type == REDIRECT_OUT)
 		return (handle_output_redirect(redirect->file, 0));
 	else if (redirect->type == REDIRECT_APPEND)
 		return (handle_output_redirect(redirect->file, 1));
-	else if (redirect->type == REDIRECT_HEREDOC)
-		return (handle_heredoc(redirect->file, env, es));
+	/*else if (redirect->type == REDIRECT_HEREDOC)
+		return (handle_heredoc(redirect->file, env, es));*/
 	return (-1);
 }
 
