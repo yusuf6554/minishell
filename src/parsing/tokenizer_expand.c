@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer_expand.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ehabes <ehabes@student.42kocaeli.com.tr    +#+  +:+       +#+        */
+/*   By: yukoc <yukoc@student.42kocaeli.com.tr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 17:11:00 by ehabes            #+#    #+#             */
-/*   Updated: 2025/08/20 14:35:57 by ehabes           ###   ########.fr       */
+/*   Updated: 2025/10/07 13:53:11 by yukoc            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,10 @@
 
 static char	*expand_exit_status(char *str, int exit_status)
 {
-	char	*status_str;
-	char	*result;
-	char	*temp;
+	char				*status_str;
+	char				*result;
+	char				*temp;
+	unsigned long		var_pos;
 
 	status_str = ft_itoa(exit_status);
 	if (!status_str)
@@ -26,8 +27,13 @@ static char	*expand_exit_status(char *str, int exit_status)
 		result = ft_strdup(status_str);
 	else
 	{
-		temp = ft_strjoin(status_str, str + 2);
-		result = temp;
+		var_pos = (unsigned long)ft_strnstr(str, "$?", ft_strlen(str));
+		if (!var_pos)
+			return (free_string(status_str), NULL);
+		temp = ft_substr(str, 0, var_pos - (unsigned long)str);
+		temp = ft_strjoin(temp, status_str);
+		result = ft_strjoin(temp, (char *)(var_pos + 2));
+		free_string(temp);
 	}
 	free_string(status_str);
 	return (result);
@@ -64,9 +70,10 @@ char	*expand_variables(char *str, char **env, int exit_status)
 	dollar_pos = ft_strchr(str, '$');
 	if (!should_expand_at_position(str, dollar_pos - str))
 		return (NULL);
+	expanded = str;
 	if (ft_strncmp(dollar_pos, "$?", 2) == 0)
-		return (expand_exit_status(str, exit_status));
-	result = ft_strdup(str);
+		expanded = expand_exit_status(str, exit_status);
+	result = ft_strdup(expanded);
 	expanded = expand_env_vars(result, env);
 	free_string(result);
 	return (expanded);

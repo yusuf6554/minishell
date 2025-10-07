@@ -6,11 +6,30 @@
 /*   By: yukoc <yukoc@student.42kocaeli.com.tr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/12 16:18:42 by ehabes            #+#    #+#             */
-/*   Updated: 2025/10/05 18:10:36 by yukoc            ###   ########.fr       */
+/*   Updated: 2025/10/07 13:12:00 by yukoc            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/execution.h"
+
+int	handle_heredoc_redirect(t_redirect *redirect)
+{
+	int		pipe_fd[2];
+
+	if (!redirect || !redirect->content)
+		return (-1);
+	if (pipe(pipe_fd) == -1)
+		return (perror_msg("pipe"), -1);
+	write(pipe_fd[1], redirect->content, ft_strlen(redirect->content));
+	close(pipe_fd[1]);
+	if (dup2(pipe_fd[0], STDIN_FILENO) == -1)
+	{
+		close(pipe_fd[0]);
+		return (perror_msg("dup2"), -1);
+	}
+	close(pipe_fd[0]);
+	return (0);
+}
 
 static int	handle_redirect_type(t_redirect *redirect, char **env, int es)
 {
@@ -22,8 +41,8 @@ static int	handle_redirect_type(t_redirect *redirect, char **env, int es)
 		return (handle_output_redirect(redirect->file, 0));
 	else if (redirect->type == REDIRECT_APPEND)
 		return (handle_output_redirect(redirect->file, 1));
-	/*else if (redirect->type == REDIRECT_HEREDOC)
-		return (handle_heredoc(redirect->file, env, es));*/
+	else if (redirect->type == REDIRECT_HEREDOC)
+		return (handle_heredoc_redirect(redirect));
 	return (-1);
 }
 
@@ -37,11 +56,12 @@ int	setup_redirections(t_redirect *redirects, char **env, int exit_status)
 	current = redirects;
 	while (current)
 	{
-		result = handle_redirect_type(current, env, exit_status);
-		if (result == -1)
-			return (-1);
-		if (result > 0 && current->type == REDIRECT_HEREDOC)
-			return (result);
+		if (current->type != REDIRECT_HEREDOC)
+		{
+			result = handle_redirect_type(current, env, exit_status);
+			if (result == -1)
+				return (-1);
+		}
 		current = current->next;
 	}
 	return (0);

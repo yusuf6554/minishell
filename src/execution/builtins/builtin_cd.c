@@ -6,7 +6,7 @@
 /*   By: yukoc <yukoc@student.42kocaeli.com.tr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/12 16:17:18 by ehabes            #+#    #+#             */
-/*   Updated: 2025/09/20 12:40:17 by yukoc            ###   ########.fr       */
+/*   Updated: 2025/10/07 13:23:46 by yukoc            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,11 @@ int	builtin_cd(char **argv, char ***env)
 	char	*new_pwd;
 	int		result;
 
+	if (argv && argv[1] && argv[2])
+	{
+		error_msg("cd", NULL, "too many arguments");
+		return (2);
+	}
 	old_pwd = getcwd(NULL, 0);
 	result = handle_cd_path(argv, old_pwd);
 	if (result != EXIT_SUCCESS)

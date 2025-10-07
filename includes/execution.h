@@ -6,7 +6,7 @@
 /*   By: yukoc <yukoc@student.42kocaeli.com.tr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 14:20:17 by yukoc             #+#    #+#             */
-/*   Updated: 2025/10/05 18:11:13 by yukoc            ###   ########.fr       */
+/*   Updated: 2025/10/07 13:12:03 by yukoc            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,8 @@ int		handle_heredoc(t_redirect *redir, t_minishell *ms);
 int		handle_heredocs(t_pipeline *pipeline, t_minishell *ms);
 /* Heredoc içeriğini oku */
 char	*read_heredoc_content(int fd);
+/* Heredoc redirection uygula */
+int		handle_heredoc_redirect(t_redirect *redirect);
 
 /* Dahili komutlar */
 /* Built-in komut mu kontrol et */

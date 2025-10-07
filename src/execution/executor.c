@@ -6,7 +6,7 @@
 /*   By: yukoc <yukoc@student.42kocaeli.com.tr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/12 16:18:15 by ehabes            #+#    #+#             */
-/*   Updated: 2025/10/05 18:33:14 by yukoc            ###   ########.fr       */
+/*   Updated: 2025/10/07 13:59:32 by yukoc            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,27 +28,8 @@ int	execute_pipeline(t_pipeline *pipeline, char ***env)
 	return (finalize_pipeline(pipes, pids, pipeline->cmd_count));
 }
 
-int	execute_command(t_cmd *cmd, char ***env)
+static void	restore_fds(int original_stdin, int original_stdout)
 {
-	int	original_stdin;
-	int	original_stdout;
-	int	exit_status;
-
-	if (!cmd || !cmd->argv || !cmd->argv[0])
-		return (EXIT_FAILURE);
-	original_stdout = dup(STDOUT_FILENO);
-	if (original_stdout == -1)
-		return (EXIT_FAILURE);
-	original_stdin = setup_redirections(cmd->redirects, *env, 0);
-	if (original_stdin == -1)
-	{
-		close(original_stdout);
-		return (EXIT_FAILURE);
-	}
-	if (is_builtin(cmd->argv[0]))
-		exit_status = execute_builtin(cmd->argv, env);
-	else
-		exit_status = execute_external_command(cmd, env);
 	if (original_stdin > 0)
 	{
 		dup2(original_stdin, STDIN_FILENO);
@@ -56,7 +37,37 @@ int	execute_command(t_cmd *cmd, char ***env)
 	}
 	dup2(original_stdout, STDOUT_FILENO);
 	close(original_stdout);
+}
+
+static int	setup_and_execute(t_cmd *cmd, char ***env, int *orig_stdout)
+{
+	int	original_stdin;
+	int	exit_status;
+
+	original_stdin = setup_redirections(cmd->redirects, *env, 0);
+	if (original_stdin == -1)
+	{
+		close(*orig_stdout);
+		return (EXIT_FAILURE);
+	}
+	if (is_builtin(cmd->argv[0]))
+		exit_status = execute_builtin(cmd->argv, env);
+	else
+		exit_status = execute_external_command(cmd, env);
+	restore_fds(original_stdin, *orig_stdout);
 	return (exit_status);
+}
+
+int	execute_command(t_cmd *cmd, char ***env)
+{
+	int	original_stdout;
+
+	if (!cmd || !cmd->argv || !cmd->argv[0])
+		return (EXIT_FAILURE);
+	original_stdout = dup(STDOUT_FILENO);
+	if (original_stdout == -1)
+		return (EXIT_FAILURE);
+	return (setup_and_execute(cmd, env, &original_stdout));
 }
 
 int	execute_single_command(t_cmd *cmd, t_minishell *ms)
@@ -77,9 +88,7 @@ int	execute_single_command(t_cmd *cmd, t_minishell *ms)
 	close(original_stdin);
 	close(original_stdout);
 	ms->exit_status = exit_status;
-	if (exit_status == 0)
-		return (1);
-	return (0);
+	return (exit_status);
 }
 
 pid_t	create_process(void)
@@ -93,46 +102,4 @@ pid_t	create_process(void)
 		return (-1);
 	}
 	return (pid);
-}
-
-int	wait_for_processes(pid_t *pids, int count)
-{
-	int	status;
-	int	last_exit_status;
-	int	i;
-
-	if (!pids || count <= 0)
-		return (EXIT_FAILURE);
-	last_exit_status = EXIT_SUCCESS;
-	i = 0;
-	while (i < count)
-	{
-		waitpid(pids[i], &status, 0);
-		if (i == count - 1)
-		{
-			if (WIFEXITED(status))
-				last_exit_status = WEXITSTATUS(status);
-			else if (WIFSIGNALED(status))
-				last_exit_status = 128 + WTERMSIG(status);
-		}
-		i++;
-	}
-	return (last_exit_status);
-}
-
-int	execute_command_main(t_pipeline *pipeline, t_minishell *ms)
-{
-	int	exit_status;
-
-	if (handle_heredocs(pipeline, ms) == -1)
-		return (-1);
-	if (pipeline->cmd_count > 1)
-	{
-		exit_status = execute_pipeline(pipeline, &ms->env);
-		ms->exit_status = exit_status;
-		if (exit_status == 0)
-			return (1);
-		return (0);
-	}
-	return (execute_single_command(pipeline->commands, ms));
 }

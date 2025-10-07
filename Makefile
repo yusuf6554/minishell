@@ -13,7 +13,7 @@ SRC_FILES = utils/shell_core.c utils/shell_input.c \
 			utils/utils_memory.c \
 			parsing/tokenizer.c parsing/tokenizer_expand.c \
 			parsing/command.c parsing/pipeline.c parsing/signal.c \
-			execution/executor.c execution/pipes.c \
+			execution/executor.c execution/executor2.c execution/pipes.c \
 			execution/redirections.c execution/builtin_dispatcher.c \
 			execution/external_command.c execution/builtin_checker.c \
 			execution/pipeline_utils.c execution/heredoc.c \

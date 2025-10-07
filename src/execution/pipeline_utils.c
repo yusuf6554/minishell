@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipeline_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ehabes <ehabes@student.42kocaeli.com.tr    +#+  +:+       +#+        */
+/*   By: yukoc <yukoc@student.42kocaeli.com.tr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 13:52:00 by ehabes            #+#    #+#             */
-/*   Updated: 2025/08/19 22:49:41 by ehabes           ###   ########.fr       */
+/*   Updated: 2025/10/07 13:12:02 by yukoc            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,19 @@ int	setup_pipeline_resources(t_pipeline *pipeline, int ***pipes, pid_t **pids)
 static void	execute_child_command(int **pipes, int i, int cmd_count, \
 	t_cmd *cmd, char ***env)
 {
-	int	exit_status;
+	int			exit_status;
+	t_redirect	*redir;
 
+	redir = cmd->redirects;
+	while (redir)
+	{
+		if (redir->type == REDIRECT_HEREDOC)
+		{
+			handle_heredoc_redirect(redir);
+			break ;
+		}
+		redir = redir->next;
+	}
 	setup_pipe_redirection(pipes, i, cmd_count);
 	close_all_pipes(pipes, cmd_count - 1);
 	setup_child_signals();
